@@ -36,6 +36,8 @@ git push origin 6-6-stable 6.6.0.omnibus
 sudo apt-get install python-pip
 
 # CentOS
+curl -o epel-release-6-8.noarch.rpm http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+sudo rpm -Uvh epel-release-6-8.noarch.rpm
 sudo yum install python-pip
 
 # Both
