@@ -26,10 +26,20 @@ gitlab_rails_log_dir = node['gitlab']['gitlab-rails']['log_directory']
 
 [
   gitlab_rails_dir,
+  gitlab_rails_public_uploads_dir
+].each do |dir_name|
+  directory dir_name do
+    owner node['gitlab']['user']['username']
+    group node['gitlab']['user']['group']
+    mode '0750'
+    recursive true
+  end
+end
+
+[
   gitlab_rails_etc_dir,
   gitlab_rails_working_dir,
   gitlab_rails_tmp_dir,
-  gitlab_rails_public_uploads_dir,
   node['gitlab']['gitlab-rails']['backup_path'],
   gitlab_rails_log_dir
 ].each do |dir_name|
