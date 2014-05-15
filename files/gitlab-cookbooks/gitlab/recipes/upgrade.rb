@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2014 GitLab.com
+# Copyright:: Copyright (c) 2014 GitLab B.V.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,24 @@
 # limitations under the License.
 #
 
-execute "initialize database" do
-  command "/opt/gitlab/bin/gitlab-rake db:schema:load db:seed_fu"
-  action :nothing
+database_clients = %w{unicorn sidekiq}
+
+database_clients.each do |client|
+  execute "gitlab-ctl stop #{client}" do
+    notifies :run, "execute[gitlab-ctl start #{client}]"
+    only_if { OmnibusHelper.should_notify?(client) }
+  end
+end
+
+file "/opt/gitlab/embedded/service/gitlab-rails/db/schema.rb" do
+  owner node['gitlab']['user']['username']
+end
+execute "gitlab-rake db:migrate"
+
+execute "gitlab-rake cache:clear"
+
+database_clients.each do |client|
+  execute "gitlab-ctl start #{client}" do
+    action :nothing
+  end
 end
