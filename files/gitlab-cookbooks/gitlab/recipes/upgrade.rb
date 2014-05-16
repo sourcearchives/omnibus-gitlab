@@ -27,9 +27,7 @@ end
 file "/opt/gitlab/embedded/service/gitlab-rails/db/schema.rb" do
   owner node['gitlab']['user']['username']
 end
-execute "gitlab-rake db:migrate"
-
-execute "gitlab-rake cache:clear"
+execute "gitlab-rake db:migrate cache:clear"
 
 database_clients.each do |client|
   execute "gitlab-ctl start #{client}" do
