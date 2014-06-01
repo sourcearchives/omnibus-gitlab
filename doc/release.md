@@ -60,10 +60,10 @@ date | mail -s "testing from $(uname -n)" $(whoami)
 - Configure aws credentials
 
 ```shell
-# Limit read access to .profile
-chmod 600 .profile
+# Limit read access to .profile (Debian) / .bash_profile (RedHat)
+chmod 600 .profile .bash_profile
 
-# Add the following variables to .profile
+# Add the following variables to .profile or .bash_profile
 export S3_BUCKET='bucket'
 export S3_REGION='region'
 export S3_ACCESS_KEY='AKmykey'
