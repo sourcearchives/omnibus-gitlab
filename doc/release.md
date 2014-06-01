@@ -34,19 +34,6 @@ git push origin 6-6-stable 6.6.0.omnibus
 
 ### One-time
 
-- Install release dependencies
-
-```shell
-# Ubuntu
-sudo apt-get install python-pip
-
-# CentOS
-sudo yum install python-pip
-
-# Both
-sudo pip install awscli
-```
-
 # Make sure mail is installed
 ```shell
 # Ubuntu / Debian
@@ -73,7 +60,17 @@ date | mail -s "testing from $(uname -n)" $(whoami)
 - Configure aws credentials
 
 ```shell
-aws configure # enter AWS key and secret
+# Limit read access to .profile
+chmod 600 .profile
+
+# Add the following variables to .profile
+export S3_BUCKET='bucket'
+export S3_REGION='region'
+export S3_ACCESS_KEY='AKmykey'
+export S3_SECRET_ACCESS_KEY='secret+key'
+
+# Log out and in as the omnibus-build user and check if the variables are set
+set | grep '^S3'
 ```
 
 - Set up the `attach.sh` script
