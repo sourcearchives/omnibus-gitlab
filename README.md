@@ -566,7 +566,11 @@ nginx['listen_addresses'] = ["0.0.0.0", "[::]"] # listen on all IPv4 and IPv6 ad
 
 ## Backups
 
-### Creating an application backup
+Below we will describe two ways you can back up omnibus-gitlab application
+data: with the built-in backup script, and using filesystem snapshots.
+
+
+### Creating an application backup using the backup script
 
 To create a backup of your repositories and GitLab metadata, run the following command.
 
@@ -585,7 +589,16 @@ reconfigure`:
 gitlab_rails['backup_path'] = '/mnt/backups'
 ```
 
-### Scheduling a backup
+### Backing up using snapshots
+
+If your Linux server has the capability to make persistent filesystem snapshots
+(e.g. using Amazon EBS), you can also use those as backups. If you are making
+backups this way, we recommend mounting the snapshot-capable filesystem at
+`/var/opt/gitlab`. This ensures that you do not miss any data in your backup,
+because all omnibus-gitlab application data (repositories, DB files, uploads)
+is stored under `/var/opt/gitlab` by default.
+
+### Scheduling a backup (using the backup script)
 
 To schedule a cron job that backs up your repositories and GitLab metadata, use the root user:
 
@@ -609,7 +622,7 @@ backups using all your disk space.  To do this add the following lines to
 gitlab_rails['backup_keep_time'] = 604800
 ```
 
-### Restoring an application backup
+### Restoring an application backup (backup script)
 
 We will assume that you have installed GitLab from an omnibus package and run
 `sudo gitlab-ctl reconfigure` at least once.
